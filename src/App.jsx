@@ -161,9 +161,9 @@ function App() {
             : 'border-transparent bg-transparent'
         }`}
       >
-        <div className="mx-auto grid max-w-[1220px] grid-cols-1 items-center gap-4 px-4 py-4 text-center sm:px-6 lg:grid-cols-[1fr_auto_1fr] lg:px-7 lg:py-6 lg:text-left">
+        <div className="mx-auto grid max-w-[1220px] grid-cols-1 items-center gap-3 px-4 py-3 text-center sm:px-6 lg:grid-cols-[1fr_auto_1fr] lg:px-7 lg:py-4 lg:text-left">
           <a
-            className="w-fit justify-self-center text-[2.2rem] tracking-tight text-gold sm:text-[2.6rem] lg:justify-self-start lg:text-[3rem]"
+            className="w-fit justify-self-center text-[1.95rem] tracking-tight text-gold sm:text-[2.3rem] lg:justify-self-start lg:text-[2.7rem]"
             href="#home"
             style={{ fontFamily: "'MountainSignature', cursive", fontWeight: 400 }}
           >
@@ -171,11 +171,11 @@ function App() {
           </a>
           <button
             type="button"
-            className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center justify-center rounded-none border border-line bg-[rgba(17,22,41,0.96)] p-2 text-gold shadow-[0_10px_24px_rgba(3,6,14,0.25)] lg:hidden"
+            className="absolute right-4 top-1/2 flex -translate-y-1/2 items-center justify-center rounded-none border border-line bg-[rgba(17,22,41,0.96)] p-1.5 text-gold shadow-[0_10px_24px_rgba(3,6,14,0.25)] lg:hidden"
             onClick={() => setIsMobileNavOpen(true)}
             aria-label="Open navigation menu"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor" aria-hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
               <path d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z" />
             </svg>
           </button>
