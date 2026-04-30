@@ -113,6 +113,7 @@ const posts = [
 
 const profileImage = '/profile3.jpg'
 const profileImage2 = '/profile2.jpg'
+const resumePdf = '/resume.pdf'
 
 function SectionTitle({ title, lead }) {
   return (
