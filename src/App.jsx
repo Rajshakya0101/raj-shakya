@@ -145,6 +145,12 @@ function App() {
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
   useEffect(() => {
+    const isDeployedHost = window.location.hostname.includes('vercel.app')
+
+    if (isDeployedHost) {
+      document.documentElement.style.fontSize = '15px'
+    }
+
     const handleScroll = () => {
       const scrollY = window.scrollY
       setIsHeaderVisible(scrollY > 12)
@@ -173,6 +179,10 @@ function App() {
     return () => {
       window.removeEventListener('scroll', handleScroll)
       revealObserver.disconnect()
+
+      if (isDeployedHost) {
+        document.documentElement.style.fontSize = ''
+      }
     }
   }, [])
 
