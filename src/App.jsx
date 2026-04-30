@@ -117,7 +117,7 @@ const resumePdf = '/resume.pdf'
 
 function SectionTitle({ title, lead }) {
   return (
-    <div className="mx-auto max-w-[680px] text-center">
+    <div data-reveal className="mx-auto max-w-[680px] text-center">
       <h2 className="mb-5 font-display text-[clamp(1.9rem,3.2vw,3rem)] font-bold text-gold">
         {title}
       </h2>
@@ -126,10 +126,12 @@ function SectionTitle({ title, lead }) {
   )
 }
 
-function Card({ children, className = '', highlight = false }) {
+function Card({ children, className = '', highlight = false, delay = 0 }) {
   return (
     <article
-      className={`group relative animate-[lift_650ms_ease_forwards] overflow-hidden rounded-[28px] border border-[rgba(34,45,73,0.8)] bg-[rgba(22,30,51,0.9)] opacity-0 shadow-[0_0_0_rgba(0,0,0,0)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_22px_44px_rgba(5,8,17,0.42)] hover:border-[#2f3b5d] before:pointer-events-none before:absolute before:inset-0 before:translate-x-[-120%] before:bg-[linear-gradient(120deg,transparent_0%,rgba(255,214,134,0.08)_50%,transparent_100%)] before:transition-transform before:duration-[420ms] hover:before:translate-x-[120%] ${highlight ? 'md:-translate-y-[6px] border-[#2d3755] shadow-[0_22px_44px_rgba(5,8,17,0.42)]' : ''} ${className}`}
+      data-reveal
+      style={{ '--reveal-delay': `${delay}ms` }}
+      className={`group relative overflow-hidden rounded-[28px] border border-[rgba(34,45,73,0.8)] bg-[rgba(22,30,51,0.9)] shadow-[0_0_0_rgba(0,0,0,0)] transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_22px_44px_rgba(5,8,17,0.42)] hover:border-[#2f3b5d] before:pointer-events-none before:absolute before:inset-0 before:translate-x-[-120%] before:bg-[linear-gradient(120deg,transparent_0%,rgba(255,214,134,0.08)_50%,transparent_100%)] before:transition-transform before:duration-[420ms] hover:before:translate-x-[120%] ${highlight ? 'md:-translate-y-[6px] border-[#2d3755] shadow-[0_22px_44px_rgba(5,8,17,0.42)]' : ''} ${className}`}
     >
       {children}
     </article>
@@ -138,19 +140,45 @@ function Card({ children, className = '', highlight = false }) {
 
 function App() {
   const [isHeaderVisible, setIsHeaderVisible] = useState(false)
+  const [isBackToTopVisible, setIsBackToTopVisible] = useState(false)
   const [showAllProjects, setShowAllProjects] = useState(false)
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsHeaderVisible(window.scrollY > 12)
+      const scrollY = window.scrollY
+      setIsHeaderVisible(scrollY > 12)
+      setIsBackToTopVisible(scrollY > 400)
     }
 
     handleScroll()
     window.addEventListener('scroll', handleScroll, { passive: true })
 
-    return () => window.removeEventListener('scroll', handleScroll)
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed')
+            revealObserver.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.18, rootMargin: '0px 0px -8% 0px' },
+    )
+
+    document.querySelectorAll('[data-reveal]').forEach((element) => {
+      revealObserver.observe(element)
+    })
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      revealObserver.disconnect()
+    }
   }, [])
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
     <div id="home" className="min-h-screen bg-bg text-text selection:bg-gold/30 selection:text-bg">
@@ -243,7 +271,7 @@ function App() {
       </aside>
 
       <main className="mx-auto max-w-[1220px] px-4 sm:px-6 lg:px-7">
-        <section className="grid min-h-[80vh] items-center gap-10 py-16 sm:py-[88px] lg:grid-cols-2">
+        <section data-reveal className="grid min-h-[80vh] items-center gap-10 py-16 sm:py-[88px] lg:grid-cols-2">
           <div className="animate-[fadeUp_900ms_ease_140ms_both]">
             <p className="mb-4 text-[0.72rem] font-extrabold uppercase tracking-[0.18em] text-gold sm:text-[0.8rem]">
               Hello
@@ -339,7 +367,7 @@ function App() {
           </div>
         </section>
 
-        <section className="grid items-center gap-10 py-16 sm:py-[88px] lg:grid-cols-2" id="about">
+        <section data-reveal className="grid items-center gap-10 py-16 sm:py-[88px] lg:grid-cols-2" id="about">
           <div className="order-2 lg:order-1">
             <div className="mx-auto w-full max-w-[360px] sm:max-w-[420px] lg:max-w-[480px]">
               <div className="aspect-[4/5] w-full animate-[floaty_7s_ease-in-out_infinite] overflow-hidden rounded-[28px] bg-[radial-gradient(circle_at_65%_30%,rgba(255,255,255,0.2),transparent_40%),linear-gradient(170deg,#2f374e,#161f35_58%,#121a2d)] shadow-[0_22px_44px_rgba(5,8,17,0.42)] transition duration-200 hover:-translate-y-[6px] hover:scale-[1.01] hover:shadow-[0_30px_54px_rgba(5,8,17,0.5)]">
@@ -397,14 +425,14 @@ function App() {
           </div>
         </section>
 
-        <section className="grid gap-6 py-16 sm:py-[88px] lg:grid-cols-[210px_1fr] lg:items-center" id="services">
+        <section data-reveal className="grid gap-6 py-16 sm:py-[88px] lg:grid-cols-[210px_1fr] lg:items-center" id="services">
           <h3 className="justify-self-center text-center font-display text-[clamp(1.8rem,2.8vw,2.4rem)] text-gold lg:[writing-mode:vertical-rl] lg:[text-orientation:mixed] lg:tracking-[0.08em]">
             My Skills
           </h3>                 
 
           <div className="grid w-full gap-x-[48px] gap-y-[36px] sm:grid-cols-2 lg:justify-self-start">
-            {skills.map((skill) => (
-              <article key={skill.label} className="animate-[lift_650ms_ease_forwards] opacity-0">
+            {skills.map((skill, index) => (
+              <article key={skill.label} data-reveal style={{ '--reveal-delay': `${index * 90}ms` }}>
                 <div className="mb-3 flex items-start justify-between gap-4 text-[0.75rem] font-bold uppercase tracking-[0.12em] text-[#c9cfe0]">
                   <p className="leading-5">{skill.label}</p>
                   <span className="shrink-0 text-gold">{skill.value}%</span>
@@ -420,7 +448,7 @@ function App() {
           </div>
         </section>
 
-        <section className="py-16 text-center sm:py-[88px]" id="service-list">
+        <section data-reveal className="py-16 text-center sm:py-[88px]" id="service-list">
           <SectionTitle
             title="Core Skills"
             lead={
@@ -429,8 +457,8 @@ function App() {
           />
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((service) => (
-              <Card key={service.title} highlight={service.highlight} className="p-9 text-left">
+            {services.map((service, index) => (
+              <Card key={service.title} highlight={service.highlight} className="p-9 text-left" delay={index * 120}>
                 <h4 className="mb-3 font-display text-[1.62rem] text-[#f0f3fd]">
                   {service.title}
                 </h4>
@@ -440,7 +468,7 @@ function App() {
           </div>
         </section>
 
-        <section className="py-16 text-center sm:py-[88px]" id="resume">
+        <section data-reveal className="py-16 text-center sm:py-[88px]" id="resume">
           <SectionTitle
             title="Resume"
             lead="Project-focused experience aligned to software engineering, machine learning, and IoT development."
@@ -449,8 +477,8 @@ function App() {
           <div className="mt-12 text-left">
             <h3 className="mb-5 text-center font-display text-[clamp(2rem,4vw,3rem)] text-[#f0f3fd] underline decoration-white decoration-1 underline-offset-12">Projects</h3>
             <div className="grid gap-5">
-              {experience.slice(0, 4).map((item) => (
-                <Card key={item.title} className="p-7">
+              {experience.slice(0, 4).map((item, index) => (
+                <Card key={item.title} className="p-7" delay={index * 120}>
                   <span className="text-[0.86rem] font-bold text-[#78809a]">{item.time}</span>
                   <h4 className="my-3 font-display text-[1.5rem] text-gold">{item.title}</h4>
                   <p className="leading-[1.75] text-muted">{item.description}</p>
@@ -477,8 +505,8 @@ function App() {
                 showAllProjects ? 'mt-5 max-h-[420px] opacity-100' : 'max-h-0 opacity-0'
               }`}
             >
-              {experience.slice(4).map((item) => (
-                <Card key={item.title} className="p-7">
+              {experience.slice(4).map((item, index) => (
+                <Card key={item.title} className="p-7" delay={index * 120}>
                   <span className="text-[0.86rem] font-bold text-[#78809a]">{item.time}</span>
                   <h4 className="my-3 font-display text-[1.5rem] text-gold">{item.title}</h4>
                   <p className="leading-[1.75] text-muted">{item.description}</p>
@@ -513,7 +541,7 @@ function App() {
           </div>
         </section>
 
-        <section className="py-16 text-center sm:py-[88px]" id="testimonials">
+        <section data-reveal className="py-16 text-center sm:py-[88px]" id="testimonials">
           <SectionTitle
             title="Certifications & Highlights"
             lead="Certifications and competitive milestones that validate practical skills."
@@ -521,7 +549,7 @@ function App() {
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((item, index) => (
-              <Card key={item.name} highlight={index === 1} className="p-7 text-left">
+              <Card key={item.name} highlight={index === 1} className="p-7 text-left" delay={index * 120}>
                 <p className="mb-6 text-[1.14rem] italic leading-[1.75] text-muted">{item.quote}</p>
                 <div className="flex items-center gap-3">
                   <span className="grid h-[52px] w-[52px] place-items-center rounded-full bg-[linear-gradient(140deg,#354363,#1a253f)] font-display font-bold text-gold">
@@ -537,7 +565,7 @@ function App() {
           </div>
         </section>
 
-        <section className="py-16 text-center sm:py-[88px]" id="clients">
+        <section data-reveal className="py-16 text-center sm:py-[88px]" id="clients">
           <SectionTitle
             title="Tech Stack"
             lead="Primary technologies used across full-stack, ML, and IoT projects."
@@ -549,6 +577,7 @@ function App() {
                 key={`${name}-${index}`}
                 highlight={index === 2}
                 className="grid min-h-[120px] place-items-center px-4 text-[0.95rem] uppercase tracking-[0.12em] text-[#8d96b2]"
+                delay={index * 90}
               >
                 <span className={index === 2 ? 'text-gold' : ''}>{name}</span>
               </Card>
@@ -569,15 +598,15 @@ function App() {
           </div>
         </section>
 
-        <section className="py-16 text-center sm:py-[88px]" id="blog">
+        <section data-reveal className="py-16 text-center sm:py-[88px]" id="blog">
           <SectionTitle
             title="Featured Projects"
             lead="Selected work demonstrating end-to-end product thinking across web, ML, and IoT."
           />
 
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post) => (
-              <Card key={post.title} highlight={post.highlight} className="p-5 text-left">
+            {posts.map((post, index) => (
+              <Card key={post.title} highlight={post.highlight} className="p-5 text-left" delay={index * 120}>
                 <div className="mb-4 aspect-[16/10] w-full"> 
                     <img
                          className="block h-full w-full object-top rounded-lg"
@@ -600,7 +629,7 @@ function App() {
           </div>
         </section>
 
-        <section className="grid gap-8 py-16 lg:grid-cols-[1fr_0.95fr] lg:items-center sm:py-[88px]" id="contact">
+        <section data-reveal className="grid gap-8 py-16 lg:grid-cols-[1fr_0.95fr] lg:items-center sm:py-[88px]" id="contact">
           <div>
             <h2 className="max-w-2xl font-display text-[clamp(1.8rem,7vw,3rem)] leading-[1.36] text-[#dfe5f7] lg:text-[clamp(1.9rem,3.2vw,3rem)]">
               Let&apos;s build impactful software and intelligent systems.{' '}
@@ -649,7 +678,7 @@ function App() {
             </ul>
           </div>
 
-          <div className="rounded-[28px] border border-line bg-[rgba(22,30,51,0.9)] p-5 text-left shadow-[0_22px_44px_rgba(5,8,17,0.28)] sm:p-8">
+          <div data-reveal className="rounded-[28px] border border-line bg-[rgba(22,30,51,0.9)] p-5 text-left shadow-[0_22px_44px_rgba(5,8,17,0.28)] sm:p-8">
             <p className="text-[0.72rem] font-extrabold uppercase tracking-[0.18em] text-gold">
               Preferred Contact
             </p>
@@ -701,6 +730,19 @@ function App() {
           Designed and Built by <span className="text-gold">Raj Shakya</span> <span>  |  </span> CIC , University of Delhi
         </footer>
       </main>
+
+      <button
+        type="button"
+        onClick={scrollToTop}
+        aria-label="Back to top"
+        className={`fixed bottom-5 right-5 z-50 inline-flex h-11 w-11 items-center justify-center rounded-full border border-gold bg-[rgba(17,22,41,0.96)] text-gold shadow-[0_16px_34px_rgba(5,8,17,0.38)] transition duration-200 hover:-translate-y-1 hover:bg-gold hover:text-[#141a2f] focus:outline-none focus:ring-2 focus:ring-gold/70 sm:bottom-6 sm:right-6 ${
+          isBackToTopVisible ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+        }`}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden>
+          <path d="M12 5.5 4.5 13l1.4 1.4L11 9.3V20h2V9.3l5.1 5.1 1.4-1.4L12 5.5z" />
+        </svg>
+      </button>
     </div>
   )
 }
