@@ -1,0 +1,42 @@
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 12, 20, 0.96);
+  z-index: 9999;
+  transition: opacity 600ms ease, visibility 600ms ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+.loader-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.loader-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(0);
+  transition: transform 600ms ease, opacity 600ms ease;
+}
+
+.loader-overlay.fade-out .loader-content {
+  transform: translateY(-8px);
+  opacity: 0.6;
+}
+
+/* Make iframe responsive on small screens */
+.loader-content iframe {
+  max-width: 85vw;
+  max-height: 85vh;
+}

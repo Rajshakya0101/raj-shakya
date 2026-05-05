@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import Loader from './components/Loader'
 
 const navLinks = [
   { id: 'home', label: 'Home' },
@@ -143,6 +144,9 @@ function App() {
   const [isBackToTopVisible, setIsBackToTopVisible] = useState(false)
   const [showAllProjects, setShowAllProjects] = useState(false)
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [loaderFading, setLoaderFading] = useState(false)
+  const [loaderReady, setLoaderReady] = useState(false)
 
   useEffect(() => {
     const isDeployedHost = window.location.hostname.includes('vercel.app')
@@ -186,12 +190,43 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    // Fallback: if iframe onLoad is delayed/blocked, don't freeze the app forever.
+    const safetyReady = setTimeout(() => setLoaderReady(true), 1200)
+    return () => clearTimeout(safetyReady)
+  }, [])
+
+  useEffect(() => {
+    if (!loaderReady) return
+
+    // Keep loader visible long enough to complete one full cycle, then fade out.
+    const animationDuration = 3500
+    const fadeDuration = 600
+
+    const startFade = setTimeout(() => setLoaderFading(true), animationDuration)
+    const finish = setTimeout(() => {
+      setLoading(false)
+      setLoaderFading(false)
+    }, animationDuration + fadeDuration)
+
+    return () => {
+      clearTimeout(startFade)
+      clearTimeout(finish)
+    }
+  }, [loaderReady])
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
     <div id="home" className="min-h-screen bg-bg text-text selection:bg-gold/30 selection:text-bg">
+      {loading && <Loader size={320} fade={loaderFading} onReady={() => setLoaderReady(true)} />}
+      <div
+        className={`transition-opacity duration-700 ${
+          loading ? 'pointer-events-none opacity-0' : 'pointer-events-auto opacity-100'
+        }`}
+      >
       <header
         className={`sticky top-0 z-20 w-full border-b transition-all duration-200 ${
           isHeaderVisible
@@ -753,6 +788,7 @@ function App() {
           <path d="M12 5.5 4.5 13l1.4 1.4L11 9.3V20h2V9.3l5.1 5.1 1.4-1.4L12 5.5z" />
         </svg>
       </button>
+      </div>
     </div>
   )
 }
