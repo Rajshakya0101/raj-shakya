@@ -12,11 +12,11 @@ const navLinks = [
 ]
 
 const skills = [
-  { label: 'Programming (C, JavaScript, Python)', value: 92 },
-  { label: 'Frameworks (React.js, Tailwind, Flask, Vite)', value: 89 },
+  { label: 'Programming (C, JavaScript, Python)', value: 90 },
+  { label: 'Frameworks (React.js, Tailwind, Flask, Vite)', value: 90 },
   { label: 'Databases (MySQL, Firebase, MongoDB)', value: 86 },
   { label: 'IoT & Hardware (ESP32, ESP8266, NodeMCU, Arduino)', value: 90 },
-  { label: 'Machine Learning & Data (TensorFlow, scikit-learn)', value: 84 },
+  { label: 'Machine Learning & Data (TensorFlow, scikit-learn)', value: 50 },
   { label: 'Tools & Softwares (Figma, Canva, Adobe Premiere Pro)', value: 90 },
 ]
 
@@ -63,7 +63,7 @@ const experience = [
     title: 'AgroSmart - Intelligent Farming Companion (SIH 2025)',
     description: 'Developed a smart irrigation platform using ESP32/ESP8266 with sensor integration, Firebase realtime control, and a Flutter Android app.',
     teckstack: 'Stack: ESP32/ESP8266, Firebase, Flutter, DHT22, Ultrasonic sensors',
-//     liveUrl: 'https://examhub-frontend-rtms.vercel.app/'
+    liveUrl: 'https://github.com/gauravvjhaa/agrosmart/releases/tag/android'
   },
   {
     time: 'Aug 2025 - Present (R&D)',
@@ -71,23 +71,33 @@ const experience = [
     description: 'Created secure device-level home automation with unique MAC-ID mapping, encrypted data transmission, and room-wise control workflows.',
     teckstack: 'Stack: ESP32/ESP8266, Firebase Authentication, Firebase Realtime DB',
   },
+  {
+    time: '2025 - Present',
+    title: 'CrimeBook – Crime Analytics & Awareness Platform',
+    description: "Created a Flutter application that transforms NCRB datasets into interactive data visualizations. Integrated OpenAI's NLP APIs to generate intelligent, location-based security alerts, and NewsAPI to deliver a personalized crime-related news feed.",
+    teckstack: 'Stack: Flutter, OpenAI NLP APIs, NewsAPI, NCRB datasets, Data Visualization',
+    liveUrl: 'https://github.com/gauravvjhaa/crimebook/releases/tag/v1.2'
+  },
 ]
 
 const testimonials = [
   {
-    name: 'Prompt Design in Vertex AI',
-    role: 'Google Cloud | 2024',
-    quote: 'Completed hands-on learning on prompt engineering and practical Generative AI workflows.',
-  },
-  {
     name: 'Data Analytics & Visualization Job Simulation',
     role: 'Accenture Forage | 2024',
     quote: 'Worked on analytics and visualization problem solving using industry-style simulation tasks.',
+    certificateUrl: '/accenture.jpg',
   },
   {
     name: "Technex'24 Highlights",
     role: 'IIT-BHU | Mar 2024',
     quote: 'Achieved 1st Place in Pixelate and 3rd Place in Micromouse competition.',
+    certificateUrl: '/IITBHU.jpg',
+  },
+  {
+    name: 'Prompt Design in Vertex AI',
+    role: 'Google Cloud | 2024',
+    quote: 'Completed hands-on learning on prompt engineering and practical Generative AI workflows.',
+    certificateUrl: '/vertexai.png',
   },
 ]
 
@@ -100,9 +110,9 @@ const posts = [
     thumbnail: '/examhub.png',
   },
   {
-    date: 'Aug 2024 - Nov 2024',
-    title: 'SmartTask: Productivity Web App with Task Optimization Engine',
-    thumbnail: '/Smart-Task.png',
+    date: 'Aug 2025 - Nov 2025',
+    title: 'AgroSmart: IoT Based Precision Agriculture System',
+    thumbnail: '/agrosmart.png',
   },
   {
     date: 'Aug 2024 - Nov 2024',
@@ -547,7 +557,7 @@ function App() {
             </div>
             <div
               className={`grid gap-5 overflow-hidden transition-[max-height,opacity,margin-top] duration-500 ease-in-out ${
-                showAllProjects ? 'mt-5 max-h-[420px] opacity-100' : 'max-h-0 opacity-0'
+                showAllProjects ? 'mt-5 max-h-[1200px] opacity-100' : 'max-h-0 opacity-0'
               }`}
             >
               {experience.slice(4).map((item, index) => (
@@ -561,7 +571,7 @@ function App() {
                   {item.liveUrl ? (
                     <div className="mt-6 flex justify-end">
                       <a
-                        className="inline-flex min-h-11 items-center justify-center rounded-none border border-gold px-5 text-[0.7rem] font-extrabold uppercase tracking-[0.16em] text-gold transition hover:-translate-y-1 hover:brightness-110"
+                        className="inline-flex min-h-11 items-center justify-center rounded-4xl border border-gold px-5 text-[0.7rem] font-extrabold uppercase tracking-[0.16em] text-gold transition hover:-translate-y-1 hover:brightness-110"
                         href={item.liveUrl}
                         target="_blank"
                         rel="noreferrer"
@@ -595,6 +605,13 @@ function App() {
           <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((item, index) => (
               <Card key={item.name} highlight={index === 1} className="p-7 text-left" delay={index * 120}>
+                <div className="mb-4 aspect-[16/10] w-full"> 
+                    <img
+                         className="block h-full w-full object-top rounded-lg"
+                         src={item.certificateUrl}
+                         alt={item.name}
+                    />
+                </div>
                 <p className="mb-6 text-[1.14rem] italic leading-[1.75] text-muted">{item.quote}</p>
                 <div className="flex items-center gap-3">
                   <span className="grid h-[52px] w-[52px] place-items-center rounded-full bg-[linear-gradient(140deg,#354363,#1a253f)] font-display font-bold text-gold">
